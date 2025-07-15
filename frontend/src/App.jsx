@@ -1,9 +1,14 @@
-import React from 'react'
+import React from "react";
+import Form from "./Form";
+import Card from "./Card";
 
 const App = () => {
   return (
-    <div>App</div>
-  )
-}
+    <div>
+      <Form />
+      <Card/>
+    </div>
+  );
+};
 
-export default App
+export default App;
