@@ -9,7 +9,7 @@ const {
 
 const cardRouter = Router();
 
-cardRouter.post("/create/", createCard);
+cardRouter.post("/create", createCard);
 cardRouter.get("/", getAllCards);
 cardRouter.get("/:id", getCardById);
 cardRouter.put("/update/:id", updateCard);

@@ -1,12 +1,12 @@
 import React from "react";
-import Form from "./Form";
-import Card from "./Card";
+import AllRoutes from "./routes/Allroute";
+import Navigation from "./components/Navigation";
 
 const App = () => {
   return (
     <div>
-      <Form />
-      <Card/>
+      <Navigation/>
+      <AllRoutes />
     </div>
   );
 };
