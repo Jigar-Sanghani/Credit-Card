@@ -15,7 +15,7 @@ const Signup = () => {
 
   const createUser = async () => {
     try {
-      await API.post("/api/user/signup", user);
+      await API.post("/user/signup", user);
       alert("User created successfully!");
     } catch (err) {
       console.error("Error creating user:", err);

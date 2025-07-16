@@ -19,7 +19,7 @@ const Cardadd = () => {
 
   const createCard = async () => {
     try {
-      await API.post("/api/card/create", card);
+      await API.post("/card/create", card);
       alert("Card created successfully!");
     } catch {
       alert("Failed to create card.");
