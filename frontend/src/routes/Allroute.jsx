@@ -5,6 +5,8 @@ import Signup from "../pages/Signup";
 import Dashboard from "../pages/Dashboard";
 import Pagenotfound from "../pages/Pagenotfound";
 import Cardadd from "../pages/CardAdd";
+import Login from "../pages/Login";
+import Profile from "../pages/Profile";
 
 const AllRoutes = () => {
   return (
@@ -12,8 +14,10 @@ const AllRoutes = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/card-add" element={<Cardadd />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<Pagenotfound />} />
       </Routes>
     </div>

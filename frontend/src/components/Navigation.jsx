@@ -6,7 +6,6 @@ const Navigation = () => {
     <nav className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          
           <div className="flex space-x-4">
             <Link
               to="/"
@@ -20,12 +19,37 @@ const Navigation = () => {
             >
               Add Card
             </Link>
-            <Link
-              to="/signup"
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
-            >
-              Sign-Up
-            </Link>
+            {user ? (
+              <Link
+                className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                to="/profile"
+              >
+                {user.name}
+              </Link>
+            ) : (
+              <Link
+                className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                to="/signup"
+              >
+                Signup
+              </Link>
+            )}
+            {user ? (
+              <p
+                className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                onClick={logOut}
+                style={{ cursor: "pointer" }}
+              >
+                logout
+              </p>
+            ) : (
+              <Link
+                className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                to="/login"
+              >
+                Login
+              </Link>
+            )}
             <Link
               to="/dashboard"
               className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
