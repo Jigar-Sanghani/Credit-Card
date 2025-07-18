@@ -2,7 +2,6 @@ const User = require("../models/user_schema");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// Register User (Sign Up)
 const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -41,7 +40,6 @@ const registerUser = async (req, res) => {
   }
 };
 
-// Login User
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -76,31 +74,35 @@ const loginUser = async (req, res) => {
   }
 };
 
-// Get All Users (Admin Only)
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find().select("-password");
+    const users = await User.find()
+      .select("-password")
+      .populate("cards", "cardHolder cardNumber expiryDate cvv cardType bank");
+
     res.json(users);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Get Single User by ID
 const getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select("-password");
+    const user = await User.findById(req.params.id)
+      .select("-password")
+      .populate("cards");
+
     if (!user) return res.status(404).json({ message: "User not found" });
+
     res.json(user);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Update User
 const updateUser = async (req, res) => {
-  const { id } = req.params;
   const { name, email, password } = req.body;
+  const userId = req.user.id;
 
   try {
     const updateData = { name, email };
@@ -108,7 +110,7 @@ const updateUser = async (req, res) => {
       updateData.password = await bcrypt.hash(password, 10);
     }
 
-    const updatedUser = await User.findByIdAndUpdate(id, updateData, {
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
       new: true,
       runValidators: true,
     }).select("-password");
@@ -122,7 +124,8 @@ const updateUser = async (req, res) => {
   }
 };
 
-// Delete User
+
+
 const deleteUser = async (req, res) => {
   try {
     const deleted = await User.findByIdAndDelete(req.params.id);

@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import API from "../config/Api";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [user, setUser] = useState({
@@ -15,11 +18,14 @@ const Signup = () => {
 
   const createUser = async () => {
     try {
-      await API.post("/user/signup", user);
-      alert("User created successfully!");
+      let res = await API.post("/user/signup", user);
+      const { user: userData, token } = res.data;
+      Cookies.set("token", token, { expires: 7 });
+      Cookies.set("user", JSON.stringify(userData), { expires: 7 });
+      toast.success("User created successfully!");
     } catch (err) {
       console.error("Error creating user:", err);
-      alert("Failed to create user.");
+      toast.error("Failed to create user.");
     }
   };
 

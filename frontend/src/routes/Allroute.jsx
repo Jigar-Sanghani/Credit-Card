@@ -7,6 +7,10 @@ import Pagenotfound from "../pages/Pagenotfound";
 import Cardadd from "../pages/CardAdd";
 import Login from "../pages/Login";
 import Profile from "../pages/Profile";
+import CardDetails from "../pages/CardDetails";
+import AllUsers from "../pages/AllUsers";
+import AllCards from "../pages/AllCards";
+import { Ability } from "../components/Ability";
 
 const AllRoutes = () => {
   return (
@@ -18,7 +22,28 @@ const AllRoutes = () => {
         <Route path="/card-add" element={<Cardadd />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/cardDetails" element={<CardDetails />} />
         <Route path="*" element={<Pagenotfound />} />
+        {Ability(["admin"]) && (
+          <>
+            <Route
+              path="/AllUsers"
+              element={
+                <Private>
+                  <AllUsers />
+                </Private>
+              }
+            />
+            <Route
+              path="/AllCards"
+              element={
+                <Private>
+                  <AllCards />
+                </Private>
+              }
+            />
+          </>
+        )}
       </Routes>
     </div>
   );

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import API from "../config/Api";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -19,14 +21,15 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await API.post("/user/login", credentials);
-      const { token } = res.data;
-
-      localStorage.setItem("token", token); 
-
-      alert("Login successful!");
+      const { user, token } = res.data;
+      Cookies.set("token", token, { expires: 7 });
+      Cookies.set("user", JSON.stringify(user), { expires: 7 });
+      toast.success("Login successful!");
+      // You might want to navigate somewhere here on success:
+      // navigate("/profile");
     } catch (err) {
       console.error("Login failed:", err.response?.data || err.message);
-      alert("Invalid email or password");
+      toast.error("Invalid email or password");
     }
   };
 

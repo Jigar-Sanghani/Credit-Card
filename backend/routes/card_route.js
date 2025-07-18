@@ -1,18 +1,14 @@
 const { Router } = require("express");
-const {
-  createCard,
-  getAllCards,
-  getCardById,
-  updateCard,
-  deleteCard,
-} = require("../controller/card_controller");
+const { getAllCards, getCardById, createCard, updateCard, deleteCard, getAllCardsAdmin } = require("../controller/card_controller");
+const { isAdmin, verifyToken } = require("../middlewares/auth");
 
 const cardRouter = Router();
 
-cardRouter.post("/create", createCard);
-cardRouter.get("/", getAllCards);
-cardRouter.get("/:id", getCardById);
-cardRouter.put("/update/:id", updateCard);
-cardRouter.delete("/delete/:id", deleteCard);
+cardRouter.get("/user", verifyToken, getAllCards);
+cardRouter.get("/:id", verifyToken, getCardById);
+cardRouter.post("/create", verifyToken, createCard);
+cardRouter.put("/update/:id", verifyToken, updateCard);
+cardRouter.delete("/delete/:id", verifyToken, deleteCard);
+cardRouter.get("/admin/all", verifyToken, getAllCardsAdmin);
 
 module.exports = cardRouter;

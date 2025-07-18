@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import API from "../config/Api";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
-const Cardadd = () => {
+const CardAdd = () => {
   const [card, setCard] = useState({
     cardHolder: "",
     cardNumber: "",
@@ -9,7 +11,6 @@ const Cardadd = () => {
     cvv: "",
     cardType: "",
     bank: "",
-    userId: "",
   });
 
   const handleInput = (e) => {
@@ -19,10 +20,22 @@ const Cardadd = () => {
 
   const createCard = async () => {
     try {
-      await API.post("/card/create", card);
-      alert("Card created successfully!");
-    } catch {
-      alert("Failed to create card.");
+      const user = JSON.parse(Cookies.get("user"));
+
+      const [year, month] = card.expiryDate.split("-");
+      const formattedExpiry = `${month}/${year.slice(2)}`;
+
+      const payload = {
+        ...card,
+        expiryDate: formattedExpiry,
+        userId: user._id,
+      };
+
+      await API.post("/card/create", payload);
+      toast.success("Card created successfully!");
+    } catch (err) {
+      console.error("Add Card:", err.response?.data || err.message);
+      toast.error("Failed to create card.");
     }
   };
 
@@ -36,7 +49,6 @@ const Cardadd = () => {
       cvv: "",
       cardType: "",
       bank: "",
-      userId: "",
     });
   };
 
@@ -101,8 +113,8 @@ const Cardadd = () => {
                 name="cvv"
                 value={card.cvv}
                 onChange={handleInput}
-                placeholder="e.g. 123"
                 maxLength={4}
+                placeholder="e.g. 123"
                 required
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
@@ -150,21 +162,6 @@ const Cardadd = () => {
           </div>
 
           <div>
-            <label className="block mb-1 font-medium text-gray-700">
-              User ID
-            </label>
-            <input
-              type="text"
-              name="userId"
-              value={card.userId}
-              onChange={handleInput}
-              placeholder="e.g. user_12345"
-              required
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            />
-          </div>
-
-          <div>
             <input
               type="submit"
               value="Add Card"
@@ -177,4 +174,4 @@ const Cardadd = () => {
   );
 };
 
-export default Cardadd;
+export default CardAdd;
