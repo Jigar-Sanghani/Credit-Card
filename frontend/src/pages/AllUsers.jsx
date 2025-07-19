@@ -33,18 +33,25 @@ const AllUsers = () => {
         {users.map((user) => (
           <div
             key={user._id}
-            className="bg-white rounded-2xl shadow-xl p-6 transition hover:shadow-2xl"
+            className="bg-white rounded-2xl shadow-xl p-6 space-y-3 transition hover:shadow-2xl"
           >
-            <h3 className="text-xl font-semibold text-indigo-800 mb-1">
-              {user.name}
-            </h3>
-            <p className="text-gray-600 mb-4">{user.email}</p>
+            <div>
+              <p className="text-sm text-gray-600 font-medium">👤 Name:</p>
+              <p className="text-lg text-indigo-800 font-semibold">{user.name}</p>
+            </div>
 
             <div>
-              <h4 className="text-sm font-semibold text-gray-700 mb-2">
-                💳 Cards:
-              </h4>
+              <p className="text-sm text-gray-600 font-medium">📧 Email:</p>
+              <p className="text-base text-gray-800">{user.email}</p>
+            </div>
 
+            <div>
+              <p className="text-sm text-gray-600 font-medium">🏷️ Role:</p>
+              <p className="text-base text-indigo-600 font-semibold">{user.role || "N/A"}</p>
+            </div>
+
+            <div>
+              <p className="text-sm text-gray-600 font-medium mb-2">💳 Cards:</p>
               {user.cards?.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {user.cards.map((card) => (
@@ -52,15 +59,13 @@ const AllUsers = () => {
                       key={card._id}
                       className="bg-indigo-50 border border-indigo-200 p-3 rounded-xl shadow-sm"
                     >
-                      <div className="font-medium text-indigo-700">
+                      <p className="text-sm font-semibold text-indigo-800">
                         {card.cardHolder}
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        {card.cardNumber}
-                      </div>
-                      <div className="text-xs mt-1 text-gray-500 italic">
+                      </p>
+                      <p className="text-sm text-gray-700">{card.cardNumber}</p>
+                      <p className="text-xs text-gray-500 italic mt-1">
                         {card.cardType} | {card.bank}
-                      </div>
+                      </p>
                     </div>
                   ))}
                 </div>

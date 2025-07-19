@@ -27,7 +27,7 @@ const AllCards = () => {
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-indigo-100 p-6">
       <div className="bg-white rounded-2xl shadow-lg p-6">
         <h2 className="text-3xl font-bold text-indigo-700 mb-6 text-center">
-          All Cards
+         -- All Cards --
         </h2>
 
         <div className="overflow-x-auto rounded-xl">

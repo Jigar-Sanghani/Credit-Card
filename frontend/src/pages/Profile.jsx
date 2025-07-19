@@ -11,7 +11,6 @@ const Profile = () => {
   const [selectedCard, setSelectedCard] = useState(null);
   const [showChangePassword, setShowChangePassword] = useState(false);
 
-  // Change password form state
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -69,7 +68,6 @@ const Profile = () => {
     navigate("/login");
   };
 
-  // Change Password submit handler
   const handleChangePassword = async (e) => {
     e.preventDefault();
 
@@ -126,6 +124,9 @@ const Profile = () => {
           <p>
             <strong>Email:</strong> {user.email}
           </p>
+          <p>
+            <strong>Role:</strong> {user.role || "N/A"}
+          </p>
         </div>
 
         <h3 className="text-2xl font-semibold mb-4 text-gray-700">
@@ -133,35 +134,49 @@ const Profile = () => {
         </h3>
 
         {cards.length > 0 ? (
-          <div className="overflow-x-auto rounded-xl shadow border border-gray-200">
-            <table className="min-w-full text-sm bg-white">
+          <div className="overflow-auto rounded-xl shadow border border-gray-200">
+            <table className="min-w-full table-auto text-sm text-left text-gray-700">
               <thead className="bg-indigo-100 text-gray-700">
                 <tr>
-                  <th className="px-4 py-2">Holder</th>
-                  <th className="px-4 py-2">Number</th>
-                  <th className="px-4 py-2">Expiry</th>
-                  <th className="px-4 py-2">CVV</th>
-                  <th className="px-4 py-2">Type</th>
-                  <th className="px-4 py-2">Bank</th>
-                  <th className="px-4 py-2 text-center">Actions</th>
+                  <th scope="col" className="px-6 py-3">
+                    Holder
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Number
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Expiry
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    CVV
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Type
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Bank
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-center">
+                    Actions
+                  </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-gray-100 bg-white">
                 {cards.map((card) => (
                   <tr
                     key={card._id}
                     className="hover:bg-gray-50 transition cursor-pointer"
                     onClick={() => setSelectedCard(card)}
                   >
-                    <td className="px-4 py-3">{card.cardHolder}</td>
-                    <td className="px-4 py-3">
+                    <td className="px-6 py-4">{card.cardHolder}</td>
+                    <td className="px-6 py-4">
                       **** **** **** {card.cardNumber.slice(-4)}
                     </td>
-                    <td className="px-4 py-3">{card.expiryDate}</td>
-                    <td className="px-4 py-3">***</td>
-                    <td className="px-4 py-3">{card.cardType}</td>
-                    <td className="px-4 py-3">{card.bank}</td>
-                    <td className="px-4 py-3 text-center">
+                    <td className="px-6 py-4">{card.expiryDate}</td>
+                    <td className="px-6 py-4">***</td>
+                    <td className="px-6 py-4">{card.cardType}</td>
+                    <td className="px-6 py-4">{card.bank}</td>
+                    <td className="px-6 py-4 text-center">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();

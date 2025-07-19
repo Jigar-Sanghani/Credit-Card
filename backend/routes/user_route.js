@@ -7,13 +7,13 @@ const {
   updateUser,
   deleteUser,
 } = require("../controller/user_controller");
-const { verifyToken } = require("../middlewares/auth");
+const { verifyToken, isAdmin } = require("../middlewares/auth");
 
 const userrouter = Router();
 
 userrouter.post("/signup", registerUser);
 userrouter.post("/login", loginUser);
-userrouter.get("/users", verifyToken, getAllUsers);
+userrouter.get("/users", verifyToken, isAdmin, getAllUsers);
 userrouter.get("/users/:id", verifyToken, getUserById);
 userrouter.put("/users/:id", verifyToken, updateUser);
 userrouter.delete("/users/:id", verifyToken, deleteUser);

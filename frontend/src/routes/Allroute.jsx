@@ -11,6 +11,8 @@ import CardDetails from "../pages/CardDetails";
 import AllUsers from "../pages/AllUsers";
 import AllCards from "../pages/AllCards";
 import { Ability } from "../components/Ability";
+import Private from "../components/Private";
+import AlertPage from "../pages/AlertPage";
 
 const AllRoutes = () => {
   return (
@@ -19,11 +21,40 @@ const AllRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/card-add" element={<Cardadd />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/cardDetails" element={<CardDetails />} />
         <Route path="*" element={<Pagenotfound />} />
+        <Route path="/alert" element={<AlertPage />} />
+        <Route
+          path="/card-add"
+          element={
+            <Private>
+              <Cardadd />
+            </Private>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <Private>
+              <Dashboard />
+            </Private>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <Private>
+              <Profile />
+            </Private>
+          }
+        />
+        <Route
+          path="/cardDetails"
+          element={
+            <Private>
+              <CardDetails />
+            </Private>
+          }
+        />
         {Ability(["admin"]) && (
           <>
             <Route

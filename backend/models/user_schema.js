@@ -25,16 +25,15 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    toJSON: { virtuals: true },  // ✅ enable virtuals in JSON output
+    toJSON: { virtuals: true },  
     toObject: { virtuals: true },
   }
 );
 
-// ✅ Virtual field to populate cards
 userSchema.virtual("cards", {
-  ref: "Card",           // model name
-  localField: "_id",     // match with user _id
-  foreignField: "userId" // in Card schema
+  ref: "Card",          
+  localField: "_id",     
+  foreignField: "userId" 
 });
 
 const User = mongoose.model("User", userSchema);

@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 
 const CardAdd = () => {
   const [card, setCard] = useState({
-    cardHolder: "",
     cardNumber: "",
     expiryDate: "",
     cvv: "",
@@ -28,6 +27,7 @@ const CardAdd = () => {
       const payload = {
         ...card,
         expiryDate: formattedExpiry,
+        cardHolder: user.name,
         userId: user._id,
       };
 
@@ -43,7 +43,6 @@ const CardAdd = () => {
     e.preventDefault();
     createCard();
     setCard({
-      cardHolder: "",
       cardNumber: "",
       expiryDate: "",
       cvv: "",
@@ -59,20 +58,7 @@ const CardAdd = () => {
           --- Add Card ---
         </h2>
         <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block mb-1 font-medium text-gray-700">
-              Card Holder
-            </label>
-            <input
-              type="text"
-              name="cardHolder"
-              value={card.cardHolder}
-              onChange={handleInput}
-              placeholder="e.g. John Doe"
-              required
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            />
-          </div>
+
 
           <div>
             <label className="block mb-1 font-medium text-gray-700">
@@ -105,9 +91,7 @@ const CardAdd = () => {
               />
             </div>
             <div className="w-1/2">
-              <label className="block mb-1 font-medium text-gray-700">
-                CVV
-              </label>
+              <label className="block mb-1 font-medium text-gray-700">CVV</label>
               <input
                 type="text"
                 name="cvv"
@@ -122,9 +106,7 @@ const CardAdd = () => {
           </div>
 
           <div>
-            <label className="block mb-1 font-medium text-gray-700">
-              Card Type
-            </label>
+            <label className="block mb-1 font-medium text-gray-700">Card Type</label>
             <select
               name="cardType"
               value={card.cardType}
