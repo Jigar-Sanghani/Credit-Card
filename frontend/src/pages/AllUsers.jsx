@@ -57,13 +57,13 @@ const AllUsers = () => {
                   {user.cards.map((card) => (
                     <div
                       key={card._id}
-                      className="bg-indigo-50 border border-indigo-200 p-3 rounded-xl shadow-sm"
+                      className="bg-indigo-50 border border-indigo-200 p-3 rounded-xl shadow-sm space-y-1"
                     >
                       <p className="text-sm font-semibold text-indigo-800">
                         {card.cardHolder}
                       </p>
                       <p className="text-sm text-gray-700">{card.cardNumber}</p>
-                      <p className="text-xs text-gray-500 italic mt-1">
+                      <p className="text-xs text-gray-500 italic">
                         {card.cardType} | {card.bank}
                       </p>
                     </div>

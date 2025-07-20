@@ -13,6 +13,8 @@ import AllCards from "../pages/AllCards";
 import { Ability } from "../components/Ability";
 import Private from "../components/Private";
 import AlertPage from "../pages/AlertPage";
+import LoginOtp from "../pages/LoginOtp";
+import VerifyOtp from "../pages/VerifyOtp";
 
 const AllRoutes = () => {
   return (
@@ -23,6 +25,9 @@ const AllRoutes = () => {
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<Pagenotfound />} />
         <Route path="/alert" element={<AlertPage />} />
+
+        <Route path="/login-otp" element={<LoginOtp />} />
+        <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route
           path="/card-add"
           element={

@@ -5,6 +5,8 @@ const DB = require("./config/db");
 const indexrouter = require("./routes/index_route");
 
 dotenv.config();
+require("dotenv").config();
+
 const app = express();
 app.use(cors());
 app.use(express.json());

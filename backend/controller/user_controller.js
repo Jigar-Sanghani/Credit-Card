@@ -19,7 +19,6 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
     });
 
-    // Optional: Generate token on signup
     const token = jwt.sign(
       { id: newUser._id, role: newUser.role },
       process.env.JWT_SECRET,
@@ -123,8 +122,6 @@ const updateUser = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-
-
 
 const deleteUser = async (req, res) => {
   try {

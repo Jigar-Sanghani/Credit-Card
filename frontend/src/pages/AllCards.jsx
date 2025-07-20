@@ -23,39 +23,73 @@ const AllCards = () => {
     fetchCards();
   }, []);
 
-  return  (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-indigo-100 p-6">
-      <div className="bg-white rounded-2xl shadow-lg p-6">
-        <h2 className="text-3xl font-bold text-indigo-700 mb-6 text-center">
-         -- All Cards --
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-indigo-100 py-10 px-6">
+      <div className="max-w-7xl mx-auto bg-white rounded-3xl shadow-xl p-8">
+        <h2 className="flex items-center justify-center gap-3 text-4xl font-extrabold text-indigo-700 mb-8">
+          <span className="text-4xl">💳</span>
+          <span>All Issued Cards</span>
         </h2>
 
-        <div className="overflow-x-auto rounded-xl">
-          <table className="w-full table-auto border border-gray-200 shadow-sm rounded-xl text-sm">
-            <thead className="bg-indigo-100 text-indigo-800 font-semibold text-left">
+        <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+          <table className="min-w-full text-sm text-gray-800 table-fixed">
+            <thead className="bg-gray-100 text-gray-700">
               <tr>
-                <th className="p-3">Card Holder</th>
-                <th className="p-3">Number</th>
-                <th className="p-3">Type</th>
-                <th className="p-3">Bank</th>
-                <th className="p-3">User</th>
-                <th className="p-3">Email</th>
+                <th className="px-4 py-3 font-semibold w-1/6 text-left">
+                  Card Holder
+                </th>
+                <th className="px-4 py-3 font-semibold w-1/6 text-left">
+                  Card Number
+                </th>
+                <th className="px-4 py-3 font-semibold w-1/6 text-left">
+                  Type
+                </th>
+                <th className="px-4 py-3 font-semibold w-1/6 text-left">
+                  Bank
+                </th>
+                <th className="px-4 py-3 font-semibold w-1/6 text-left">
+                  User
+                </th>
+                <th className="px-4 py-3 font-semibold w-1/6 text-left">
+                  Email
+                </th>
               </tr>
             </thead>
             <tbody>
-              {cards.map((card, index) => (
-                <tr
-                  key={card._id}
-                  className={`hover:bg-indigo-50 transition ${index % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
-                >
-                  <td className="p-3">{card.cardHolder}</td>
-                  <td className="p-3">{card.cardNumber}</td>
-                  <td className="p-3">{card.cardType}</td>
-                  <td className="p-3">{card.bank}</td>
-                  <td className="p-3">{card.userId?.name || "Unknown"}</td>
-                  <td className="p-3">{card.userId?.email || "N/A"}</td>
+              {cards.length > 0 ? (
+                cards.map((card) => (
+                  <tr
+                    key={card._id}
+                    className="bg-white border-b hover:bg-indigo-50 transition"
+                  >
+                    <td className="px-4 py-3 w-1/6 truncate">
+                      {card.cardHolder}
+                    </td>
+                    <td className="px-4 py-3 w-1/6 truncate">
+                      {card.cardNumber}
+                    </td>
+                    <td className="px-4 py-3 w-1/6 capitalize">
+                      {card.cardType}
+                    </td>
+                    <td className="px-4 py-3 w-1/6">{card.bank}</td>
+                    <td className="px-4 py-3 w-1/6 font-semibold text-indigo-700 truncate">
+                      {card.userId?.name || "Unknown"}
+                    </td>
+                    <td className="px-4 py-3 w-1/6 text-gray-600 truncate">
+                      {card.userId?.email || "N/A"}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="6"
+                    className="text-center py-6 text-gray-400 italic bg-white"
+                  >
+                    No cards available.
+                  </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
@@ -63,4 +97,5 @@ const AllCards = () => {
     </div>
   );
 };
+
 export default AllCards;

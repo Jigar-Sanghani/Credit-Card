@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import API from "../config/Api";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import GoogleLoginButton from "../components/GoogleLoginButton";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
@@ -22,28 +23,31 @@ const Login = () => {
     try {
       const res = await API.post("/user/login", credentials);
       const { user, token } = res.data;
+
       Cookies.set("token", token, { expires: 7 });
       Cookies.set("user", JSON.stringify(user), { expires: 7 });
-      toast.success("Login successful!");
-      // You might want to navigate somewhere here on success:
-      // navigate("/profile");
+
+      toast.success("✅ Login successful!");
+      navigate("/");
     } catch (err) {
-      console.error("Login failed:", err.response?.data || err.message);
-      toast.error("Invalid email or password");
+      const errorMsg =
+        err.response?.data?.message ||
+        err.response?.data?.errors?.[0]?.msg ||
+        "❌ Login failed";
+
+      toast.error(errorMsg);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-50 to-indigo-100 px-4">
-      <div className="bg-white rounded-3xl shadow-2xl p-10 w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center text-blue-800 mb-8">
-          --- Login ---
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-200 px-4">
+      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md animate-fade-in">
+        <h2 className="text-3xl font-extrabold text-center text-indigo-700 mb-6">
+          Login to Your Account
         </h2>
         <form onSubmit={handleLogin} className="space-y-5">
           <div>
-            <label className="block mb-1 font-medium text-gray-700">
-              Email
-            </label>
+            <label className="block text-gray-600 mb-1">Email</label>
             <input
               type="email"
               name="email"
@@ -51,33 +55,49 @@ const Login = () => {
               onChange={handleInput}
               placeholder="e.g. john@example.com"
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="w-full px-4 py-3 border rounded-xl border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
-
           <div>
-            <label className="block mb-1 font-medium text-gray-700">
-              Password
-            </label>
+            <label className="block text-gray-600 mb-1">Password</label>
             <input
               type="password"
               name="password"
               value={credentials.password}
               onChange={handleInput}
-              placeholder="Enter your password"
+              placeholder="••••••••"
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="w-full px-4 py-3 border rounded-xl border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
-
-          <div>
-            <input
-              type="submit"
-              value="Login"
-              className="w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition duration-300 cursor-pointer"
-            />
-          </div>
+          <button
+            type="submit"
+            className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition duration-300 cursor-pointer"
+          >
+            Login with Password
+          </button>
         </form>
+
+        <div className="text-center mt-4">
+          <p className="text-sm text-gray-500">
+            Or{" "}
+            <Link
+              to="/login-otp"
+              className="text-indigo-600 hover:underline font-medium"
+            >
+              Login with OTP
+            </Link>
+          </p>
+        </div>
+
+        <div className="mt-6">
+          <div className="flex items-center gap-4 my-6">
+            <hr className="flex-grow border-t border-gray-300" />
+            <span className="text-gray-500 text-sm">or</span>
+            <hr className="flex-grow border-t border-gray-300" />
+          </div>
+          <GoogleLoginButton />
+        </div>
       </div>
     </div>
   );
