@@ -123,6 +123,32 @@ const updateUser = async (req, res) => {
   }
 };
 
+const updatePasswordWithOTP = async (req, res) => {
+  const { email, otp, newPassword } = req.body;
+
+  if (!email || !otp || !newPassword) {
+    return res.status(400).json({ message: "All fields are required." });
+  }
+
+  const user = await User.findOne({ email });
+  if (!user || !user.otp) {
+    return res.status(404).json({ message: "User or OTP not found." });
+  }
+
+  const isValid = user.otp.code === otp && user.otp.expiresAt > Date.now();
+  if (!isValid) {
+    return res.status(401).json({ message: "Invalid or expired OTP." });
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  user.password = hashedPassword;
+  user.otp = undefined;
+
+  await user.save({ validateBeforeSave: false });
+
+  res.json({ message: "Password updated successfully." });
+};
+
 const deleteUser = async (req, res) => {
   try {
     const deleted = await User.findByIdAndDelete(req.params.id);
@@ -141,4 +167,5 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
+  updatePasswordWithOTP,
 };

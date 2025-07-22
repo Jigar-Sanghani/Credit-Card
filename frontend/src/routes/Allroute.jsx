@@ -15,6 +15,9 @@ import Private from "../components/Private";
 import AlertPage from "../pages/AlertPage";
 import LoginOtp from "../pages/LoginOtp";
 import VerifyOtp from "../pages/VerifyOtp";
+import TransactionAdd from "../pages/TransactionAdd";
+import TransactionDetails from "../pages/TransactionDetails";
+import AllTransaction from "../pages/AllTransaction";
 
 const AllRoutes = () => {
   return (
@@ -60,6 +63,22 @@ const AllRoutes = () => {
             </Private>
           }
         />
+        <Route
+          path="/transactionDetails"
+          element={
+            <Private>
+              <TransactionDetails />
+            </Private>
+          }
+        />
+        <Route
+          path="/transaction-add/:cardId"
+          element={
+            <Private>
+              <TransactionAdd />
+            </Private>
+          }
+        />
         {Ability(["admin"]) && (
           <>
             <Route
@@ -67,6 +86,14 @@ const AllRoutes = () => {
               element={
                 <Private>
                   <AllUsers />
+                </Private>
+              }
+            />
+            <Route
+              path="/AllTransaction"
+              element={
+                <Private>
+                  <AllTransaction />
                 </Private>
               }
             />

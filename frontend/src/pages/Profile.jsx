@@ -9,9 +9,10 @@ const Profile = () => {
   const [user, setUser] = useState(null);
   const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
-  const [showChangePassword, setShowChangePassword] = useState(false);
 
-  const [currentPassword, setCurrentPassword] = useState("");
+  const [showChangePassword, setShowChangePassword] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -37,26 +38,25 @@ const Profile = () => {
       });
       setCards(res.data.cards || []);
     } catch (err) {
-      console.error("Failed to fetch cards:", err);
       toast.error("Failed to fetch cards.");
     }
   };
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this card?")) return;
+
     try {
       const token = Cookies.get("token");
       await API.delete(`/card/delete/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      const res = await API.get("/card/user", {
+      const updated = await API.get("/card/user", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setCards(res.data.cards || []);
+      setCards(updated.data.cards || []);
       toast.success("Card deleted successfully!");
     } catch (err) {
-      console.error("Failed to delete card:", err);
       toast.error("Failed to delete card.");
     }
   };
@@ -66,6 +66,21 @@ const Profile = () => {
     Cookies.remove("user");
     toast.success("Logged out successfully!");
     navigate("/login");
+  };
+
+  const handleSendOtp = async () => {
+    try {
+      const token = Cookies.get("token");
+      await API.post(
+        "/user/send-otp",
+        { email: user.email },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success("OTP sent to your email.");
+      setOtpSent(true);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to send OTP.");
+    }
   };
 
   const handleChangePassword = async (e) => {
@@ -79,11 +94,11 @@ const Profile = () => {
     try {
       const token = Cookies.get("token");
       await API.put(
-        "/user/update-profile",
+        "/user/update-password",
         {
-          name: user.name,
           email: user.email,
-          password: newPassword,
+          otp,
+          newPassword,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -91,14 +106,18 @@ const Profile = () => {
       );
 
       toast.success("Password changed successfully!");
-      setShowChangePassword(false);
-      setCurrentPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
+      resetPasswordFields();
     } catch (err) {
-      console.error("Password change failed:", err);
       toast.error(err.response?.data?.message || "Failed to change password.");
     }
+  };
+
+  const resetPasswordFields = () => {
+    setOtp("");
+    setOtpSent(false);
+    setNewPassword("");
+    setConfirmPassword("");
+    setShowChangePassword(false);
   };
 
   if (selectedCard) {
@@ -138,27 +157,13 @@ const Profile = () => {
             <table className="min-w-full table-auto text-sm text-left text-gray-700">
               <thead className="bg-indigo-100 text-gray-700">
                 <tr>
-                  <th scope="col" className="px-6 py-3">
-                    Holder
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Number
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Expiry
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    CVV
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Type
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Bank
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-center">
-                    Actions
-                  </th>
+                  <th className="px-6 py-3">Holder</th>
+                  <th className="px-6 py-3">Number</th>
+                  <th className="px-6 py-3">Expiry</th>
+                  <th className="px-6 py-3">CVV</th>
+                  <th className="px-6 py-3">Type</th>
+                  <th className="px-6 py-3">Bank</th>
+                  <th className="px-6 py-3 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 bg-white">
@@ -196,7 +201,6 @@ const Profile = () => {
           <p className="text-gray-500">You have no cards added.</p>
         )}
 
-        {/* Buttons Row */}
         <div className="mt-6 flex justify-center gap-4">
           <button
             onClick={() => setShowChangePassword((prev) => !prev)}
@@ -220,58 +224,74 @@ const Profile = () => {
           </button>
         </div>
 
-        {/* Inline Change Password Form */}
         {showChangePassword && (
-          <form
-            onSubmit={handleChangePassword}
-            className="max-w-md mx-auto mt-8 bg-yellow-50 p-6 rounded-xl shadow-inner border border-yellow-300"
-          >
-            <h3 className="text-xl font-semibold text-yellow-700 mb-4 text-center">
-              Change Password
-            </h3>
+          <div className="max-w-md mx-auto mt-8 bg-yellow-50 p-6 rounded-xl shadow-inner border border-yellow-300">
+            {!otpSent ? (
+              <>
+                <h3 className="text-xl font-semibold text-yellow-700 mb-4 text-center">
+                  Send OTP to Email
+                </h3>
+                <p className="mb-4 text-center text-yellow-800">
+                  Click the button to receive a one-time password at{" "}
+                  <strong>{user.email}</strong>.
+                </p>
+                <button
+                  onClick={handleSendOtp}
+                  className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 rounded-xl transition cursor-pointer"
+                >
+                  Send OTP
+                </button>
+              </>
+            ) : (
+              <form onSubmit={handleChangePassword}>
+                <h3 className="text-xl font-semibold text-yellow-700 mb-4 text-center">
+                  Change Password
+                </h3>
 
-            <label className="block mb-2 font-semibold text-yellow-800">
-              Current Password
-            </label>
-            <input
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              required
-              className="w-full mb-4 px-4 py-2 rounded border border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            />
+                <label className="block mb-2 font-semibold text-yellow-800">
+                  OTP
+                </label>
+                <input
+                  type="text"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  required
+                  className="w-full mb-4 px-4 py-2 rounded border border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                />
 
-            <label className="block mb-2 font-semibold text-yellow-800">
-              New Password
-            </label>
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-              minLength={6}
-              className="w-full mb-4 px-4 py-2 rounded border border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            />
+                <label className="block mb-2 font-semibold text-yellow-800">
+                  New Password
+                </label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  className="w-full mb-4 px-4 py-2 rounded border border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                />
 
-            <label className="block mb-2 font-semibold text-yellow-800">
-              Confirm New Password
-            </label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              minLength={6}
-              className="w-full mb-4 px-4 py-2 rounded border border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            />
+                <label className="block mb-2 font-semibold text-yellow-800">
+                  Confirm New Password
+                </label>
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  className="w-full mb-4 px-4 py-2 rounded border border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                />
 
-            <button
-              type="submit"
-              className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 rounded-xl transition cursor-pointer"
-            >
-              Submit
-            </button>
-          </form>
+                <button
+                  type="submit"
+                  className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 rounded-xl transition cursor-pointer"
+                >
+                  Submit
+                </button>
+              </form>
+            )}
+          </div>
         )}
       </div>
     </div>

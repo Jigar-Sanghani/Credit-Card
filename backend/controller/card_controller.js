@@ -45,10 +45,11 @@ const createCard = async (req, res) => {
 
 const getAllCards = async (req, res) => {
   try {
-    const cards = await Card.find({ userId: req.user.id }).populate(
-      "userId",
-      "name email role"
-    );
+    const cards = await Card.find({ userId: req.user.id })
+      .populate("userId", "name email role")
+      .populate({
+        path: "transactions",
+      });
 
     res.json({ cards });
   } catch (err) {

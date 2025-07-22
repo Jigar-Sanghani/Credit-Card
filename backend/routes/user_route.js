@@ -6,6 +6,7 @@ const {
   getUserById,
   updateUser,
   deleteUser,
+  updatePasswordWithOTP,
 } = require("../controller/user_controller");
 const { verifyToken, isAdmin } = require("../middlewares/auth");
 const { googleLogin } = require("../controller/google_auth");
@@ -25,5 +26,8 @@ userrouter.post("/send-otp", sendOTP);
 userrouter.post("/verify-otp", verifyOTP);
 
 userrouter.post("/google-login", googleLogin);
+
+userrouter.put("/update-password", updatePasswordWithOTP);
+
 
 module.exports = userrouter;

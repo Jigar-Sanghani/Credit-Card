@@ -48,8 +48,18 @@ const cardSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
+
+cardSchema.virtual("transactions", {
+  ref: "Transaction",
+  localField: "_id",
+  foreignField: "card",
+});
 
 const Card = mongoose.model("Card", cardSchema);
 module.exports = Card;

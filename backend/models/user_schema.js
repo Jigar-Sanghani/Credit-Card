@@ -56,4 +56,10 @@ userSchema.virtual("cards", {
   foreignField: "userId",
 });
 
+userSchema.virtual("transactions", {
+  ref: "Transaction",
+  localField: "_id",
+  foreignField: "user",
+});
+
 module.exports = mongoose.model("User", userSchema);
