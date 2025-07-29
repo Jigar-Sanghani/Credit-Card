@@ -9,12 +9,14 @@ import API from "../config/Api";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import TransactionDetails from "./TransactionDetails";
+import chipImage from "../utils/img/chip.png";
 
 const CardDetails = ({ card, onBack, onDelete }) => {
   const [showCardNumber, setShowCardNumber] = useState(false);
   const [showCVV, setShowCVV] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [selectedtransactions, setSelectedtransactions] = useState(null);
+  const [showCardVisual, setShowCardVisual] = useState(false);
 
   const navigate = useNavigate();
 
@@ -63,7 +65,6 @@ const CardDetails = ({ card, onBack, onDelete }) => {
     }
   };
 
-
   if (selectedtransactions) {
     return (
       <TransactionDetails
@@ -89,16 +90,18 @@ const CardDetails = ({ card, onBack, onDelete }) => {
 
         <div className="grid grid-cols-1 gap-4 text-gray-700 text-lg">
           <div>
-            <span className="font-semibold">Card Holder:</span>{" "}
-            {card.cardHolder}
+            <span className="font-semibold">Card Holder :</span>{" "}
+            {card.cardHolder || "CARD HOLDER"}
           </div>
 
           <div className="flex items-center justify-between">
             <div>
-              <span className="font-semibold">Card Number:</span>{" "}
+              <span className="font-semibold">Card Number :</span>{" "}
               {showCardNumber
-                ? card.cardNumber
-                : "**** **** **** " + card.cardNumber.slice(-4)}
+                ? (card.cardNumber || "0000000000000000")
+                    .replace(/(.{4})/g, "$1 ")
+                    .trim()
+                : "**** **** **** " + (card.cardNumber?.slice(-4) || "0000")}
             </div>
             <button
               onClick={() => setShowCardNumber((prev) => !prev)}
@@ -110,13 +113,23 @@ const CardDetails = ({ card, onBack, onDelete }) => {
           </div>
 
           <div>
-            <span className="font-semibold">Expiry Date:</span>{" "}
-            {card.expiryDate}
+            <span className="font-semibold">VALID FROM :</span>{" "}
+            {card.createdAt
+              ? new Date(card.createdAt).toLocaleDateString("en-US", {
+                  month: "2-digit",
+                  year: "2-digit",
+                })
+              : "- - / - -"}
+          </div>
+
+          <div>
+            <span className="font-semibold">VALID THRU :</span>{" "}
+            {card.expiryDate || "- - / - -"}
           </div>
 
           <div className="flex items-center justify-between">
             <div>
-              <span className="font-semibold">CVV:</span>{" "}
+              <span className="font-semibold">CVV : </span>{" "}
               {showCVV ? card.cvv : "***"}
             </div>
             <button
@@ -129,10 +142,122 @@ const CardDetails = ({ card, onBack, onDelete }) => {
           </div>
 
           <div>
-            <span className="font-semibold">Type:</span> {card.cardType}
+            <span className="font-semibold">Card Type :</span>{" "}
+            {card.cardType || "CARD TYPE"}
           </div>
+
           <div>
-            <span className="font-semibold">Bank:</span> {card.bank}
+            <span className="font-semibold">Card Label :</span>{" "}
+            {card.label || "Commercial"}
+          </div>
+
+          <div>
+            <span className="font-semibold">Bank :</span>{" "}
+            {card.bank || "Customer BANK"}
+          </div>
+        </div>
+        <div className="relative mt-8">
+          <button
+            onClick={() => setShowCardVisual((prev) => !prev)}
+            className={`mb-4 px-5 py-2.5 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all duration-300 ease-in-out
+      ${
+        showCardVisual
+          ? "bg-white text-indigo-700 border-2 border-indigo-600 hover:bg-indigo-50"
+          : "bg-indigo-600 text-white hover:bg-indigo-700"
+      }`}
+          >
+            {showCardVisual ? "🔼 Hide Card Preview" : "🔽 Show Card Preview"}
+          </button>
+
+          {/* Animated Card Preview Section */}
+          <div
+            className={`transition-all duration-500 ease-in-out overflow-hidden ${
+              showCardVisual
+                ? "max-h-[500px] opacity-100 mt-5"
+                : "max-h-0 opacity-0"
+            }`}
+          >
+            {" "}
+            <div className="max-w-sm mx-auto">
+              <div
+                className="relative text-white rounded-2xl shadow-2xl px-6 pt-4 pb-6 h-56"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #0a3e79 0%, #042e59 100%)",
+                  fontFamily: "sans-serif",
+                }}
+              >
+                {/* Top Row: Label + Bank */}
+                <div className="flex justify-between items-center mb-5">
+                  <p className="uppercase text-sm font-semibold tracking-wider text-gray-200">
+                    {card.label || "Commercial"}
+                  </p>
+                  <h2 className="text-sm font-bold tracking-wide uppercase text-white">
+                    {card.bank || "Customer BANK"}
+                  </h2>
+                </div>
+
+                <div className="flex justify-start mb-3">
+                  <img src={chipImage} alt="Chip" className="h-8 w-10" />
+                </div>
+
+                {/* Card Number + Toggle */}
+                <div className="flex justify-between items-center mb-3">
+                  <div className="text-xl sm:text-2xl font-semibold tracking-widest font-mono">
+                    {showCardNumber
+                      ? (card.cardNumber || "0000000000000000")
+                          .replace(/(.{4})/g, "$1 ")
+                          .trim()
+                      : "**** **** **** " +
+                        (card.cardNumber?.slice(-4) || "0000")}
+                  </div>
+                  <button
+                    onClick={() => setShowCardNumber((prev) => !prev)}
+                    className="text-indigo-300 hover:text-white text-xl"
+                    title="Toggle Card Number"
+                  >
+                    {showCardNumber ? (
+                      <AiOutlineEyeInvisible />
+                    ) : (
+                      <AiOutlineEye />
+                    )}
+                  </button>
+                </div>
+
+                {/* Validity Info */}
+                <div className="flex justify-start text-xs text-gray-300 gap-8 mb-5">
+                  <div>
+                    <p className="mb-0.5">VALID FROM</p>
+                    <p className="text-white">
+                      {card.createdAt
+                        ? new Date(card.createdAt).toLocaleDateString("en-US", {
+                            month: "2-digit",
+                            year: "2-digit",
+                          })
+                        : "- - / - -"}{" "}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="mb-0.5">VALID THRU</p>
+                    <p className="text-white">
+                      {card.expiryDate || "- - / - -"}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Bottom Row: Cardholder + Card Type */}
+                <div className="flex justify-between items-end">
+                  <div>
+                    <p className="text-sm font-semibold tracking-wide">
+                      {card.cardHolder || "CARD HOLDER"}
+                    </p>
+                  </div>
+                  <h3 className="text-sm font-bold uppercase tracking-wide text-white">
+                    {card.cardType || "CARD TYPE"}
+                  </h3>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

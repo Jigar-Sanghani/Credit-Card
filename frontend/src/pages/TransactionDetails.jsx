@@ -10,7 +10,7 @@ const TransactionDetails = ({ transaction, onBack, onDelete }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-indigo-50 to-indigo-100 py-12 px-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 py-12 px-6">
       <div className="max-w-2xl mx-auto bg-white p-10 rounded-3xl shadow-2xl border border-indigo-100">
         <h2 className="text-3xl font-bold text-indigo-700 mb-6 flex items-center gap-2">
           📄 Transaction Details

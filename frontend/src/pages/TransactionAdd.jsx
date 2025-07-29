@@ -52,7 +52,7 @@ const TransactionAdd = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-100 to-emerald-100 flex items-center justify-center py-10 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 flex items-center justify-center py-10 px-4">
       <div className="bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row w-full max-w-5xl">
         <div className="md:w-1/2 relative bg-gradient-to-br from-cyan-600 to-indigo-500 text-white p-8 flex items-center justify-center">
           <div className="text-center space-y-4">

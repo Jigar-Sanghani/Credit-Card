@@ -4,7 +4,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 
 const Pagenotfound = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-6 text-center">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 px-6 text-center">
       <h1 className="text-7xl font-extrabold text-blue-600 drop-shadow-md mb-4">
         404
       </h1>

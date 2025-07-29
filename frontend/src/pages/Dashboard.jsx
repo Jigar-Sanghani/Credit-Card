@@ -27,7 +27,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-gradient-to-r from-blue-50 to-indigo-100">
+    <div className="min-h-screen flex bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100">
       
       {/* Sidebar */}
       <aside className="w-64 bg-white shadow-xl p-6 rounded-tr-3xl rounded-br-3xl hidden md:flex flex-col">

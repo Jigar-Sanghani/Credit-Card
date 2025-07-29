@@ -133,7 +133,7 @@ const Profile = () => {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-indigo-50 py-10 px-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 py-10 px-6">
       <div className="max-w-5xl mx-auto bg-white p-10 rounded-3xl shadow-2xl border border-indigo-100">
         <h2 className="text-4xl font-bold text-indigo-700 text-center mb-8">
           👤 {user.name}'s Profile
