@@ -17,3 +17,13 @@ export const incrementAlertCount = () => {
 export const clearAlertCount = () => {
   Cookies.remove("alertCount");
 };
+
+// ✅ Missing export: check if alerts have been seen
+export const areAlertsSeen = () => {
+  return Cookies.get("alertsSeen") === "true";
+};
+
+// ✅ Optional: mark alerts as seen
+export const markAlertsAsSeen = () => {
+  Cookies.set("alertsSeen", "true");
+};

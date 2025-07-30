@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   return (
-    <div>
+    <div className="pt-16">
       <Navigation />
       <AllRoutes />
       <ToastContainer />
