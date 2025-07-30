@@ -9,7 +9,6 @@ import API from "../config/Api";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import TransactionDetails from "./TransactionDetails";
-import chipImage from "../utils/img/chip.png";
 
 const CardDetails = ({ card, onBack, onDelete }) => {
   const [showCardNumber, setShowCardNumber] = useState(false);
@@ -198,7 +197,11 @@ const CardDetails = ({ card, onBack, onDelete }) => {
                 </div>
 
                 <div className="flex justify-start mb-3">
-                  <img src={chipImage} alt="Chip" className="h-8 w-10" />
+                  <img
+                    src="https://res.cloudinary.com/dbjiq5def/image/upload/v1753859539/Chip_akvl2d.png"
+                    alt="Chip"
+                    className="h-8 w-10"
+                  />
                 </div>
 
                 {/* Card Number + Toggle */}
